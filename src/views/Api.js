@@ -22,7 +22,7 @@ let token = await localStorage.getItem('token')
   config.headers['Access-Key'] = 'vwznw2mw.O7U8tx23y0vyC5eUClLNyYqaIAJ08P40';
   return config;
 });
-const baseUrl = 'http://18.188.70.103:8000/api'
+const baseUrl = 'https://api.mytransporter.io/'
 // const mediaBaseUrl = 'https://api.groto.ng'
 export default {
   axios_instance,
