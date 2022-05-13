@@ -1,10 +1,18 @@
 <template>
     				<div class="row" >
+						
 						<div class="col-xl-12">
 							<div class="row  text-center" style="background-color:#ff6600; border-top-left-radius:30px;  border-top-right-radius:30px">
-								<h3 style="padding-top:1em; color:white">Set Delivery Channel </h3>
+								<h3 style="padding-top:1em; color:white"> <a @click="preivousComponent"><i class="fa fa-long-arrow-left" aria-hidden="true" style="font-size:25px;margin-top:10px; margin-right:2em"></i> </a> Set Delivery Channel </h3>
 							</div>
+							
 							<div class="row " style="">
+								<form @submit.prevent="updateState">
+								<div class="alert alert-danger alert-dismissible alert-alt fade show" v-if="errors.length">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+                                        </button>
+                                        <span v-for="error in errors" :key="error"><strong>{{error}}<br></strong></span>
+                                </div>
 								<div class="row" style="margin-top:2.5em; padding-right:1em; padding-left:1em">
 								<div class="card-body pb-0 dz-scroll loadmore-content pt-0 " id="LatestSalesContent">
                                     <div class="row  form-material">
@@ -16,33 +24,38 @@
 									<div class="row">
 									<div class="mb-3 col-lg-6">
 									<label class="mb-1" style="600">Title Description</label>
-										<input type="text" class="form-control" v-model="item_description" placeholder="Title Description " name="item_description">
+										<input type="text" class="form-control" v-model="item_description" placeholder="Title Description " name="item_description" required>
 									</div>
 									<div class="col-lg-6">
 									<label class="mb-1 " style="600">Expected Delivery Time</label>
-										<input type="text" class="form-control" v-model="delivery_time" placeholder="20:00 08:09 " name="delivery_time">
+										<input type="datetime-local" class="form-control" v-model="item_description" placeholder="Time " name="item_description" required>
 									</div>
 									</div>
 									<div  class="mb-3">
 										<label class="mb-1" style="600" >Short Description</label>
-									 <textarea class="form-control" v-model="extra_description" rows="5" id="comment"></textarea>
+									 <textarea class="form-control" v-model="extra_description" rows="5" id="comment" ></textarea>
 									</div>
 
                                 <div>
-									
-                                    <a href="javascript:void(0);" class="btn btn-secondary btn-block text-white" @click="updateState">Proceed</a>
+									<div class="text-center">
+										<button type="submit" class="btn btn-primary btn-block" :disabled="loading">Proceed</button>
+									</div>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-secondary btn-block text-white" :disabled="loading" @click="updateState">Proceed</a> -->
                                 </div>
 									
 							</div>
 						</div>
+					</form>
+					
 					</div>
+
 				</div>
 			</div>	
 </template>
 
 <script>
 import Api from "../views/Api.js"
- 
+
 export default {
     name: 'SetChannel',
     components: { },
@@ -57,6 +70,8 @@ export default {
 			delivery_time: '',
 			item_description: '',
 			activeIndex:0,
+			errors: [],
+			previousState: 'location',
 			transport_types: [
 				{
 					id:1,
@@ -70,18 +85,18 @@ export default {
 					image:require('../statics/van_delivery.png'),
 					name: 'Van Delivery'
 				},
-				{
-					id:3,
-				   	code:"DRONE",
-					image:require('../statics/drone.png'),
-					name: 'Drone Delivery'
-				},
-				{
-					id:4,
-					code:"BICYCLE",
-					image:require('../statics/bicycle.png'),
-					name: 'Bicycle Delivery'
-				},
+				// {
+				// 	id:3,
+				//    	code:"DRONE",
+				// 	image:require('../statics/drone.png'),
+				// 	name: 'Drone Delivery'
+				// },
+				// {
+				// 	id:4,
+				// 	code:"BICYCLE",
+				// 	image:require('../statics/bicycle.png'),
+				// 	name: 'Bicycle Delivery'
+				// },
 				{
 					id:5,
 				   	code:"TRUCK",
@@ -96,47 +111,54 @@ export default {
 				}
 			],
 			state: 'merchant',
+			loading: false
 		}
 	},
 	methods:{
-		change_transport_type(type){
-			console.log(this.transport_type)
-			this.transport_type = type
-			console.log(this.transport_type)
+		preivousComponent(){
+			this.$emit('change_state', this.previousState)
 		},
-
+		change_transport_type(type){
+			this.transport_type = type
+		},
 		loadScript(){
-					
 		},
 
 		updateState(){
+		this.errors.splice(0);
 		const formData={
 		transport_type:this.transport_type,
 		pickup_latitude: this.$store.state.order.pickup_latitude,
 		pickup_longitude: this.$store.state.order.pickup_longitude,
 		}
-		console.log(formData);
 		const storeData = {
 			extra_description:this.extra_description, 
 			set_time:this.delivery_time,
 			item_description:this.item_description,
 			transport_type:this.transport_type,
 		}
-		console.log(storeData);
+		this.loading = true
 		Api.axios_instance.post(Api.baseUrl+'/transporter/search', formData)
 		.then(
 			async response => {
-			console.log(response);
 			const merchant_list = response.data.closest_merchants
 			const recommended_merchant = response.data.recommended_list
 			const merchant_data = {merchant_list, recommended_merchant}
 			this.$store.commit('set_more_info', storeData)
 			await this.$store.commit('get_merchant', merchant_data)
 			this.$emit('change_state', this.state)
-			
 		}).catch(error => {
-			console.log(error.response);
+			if(error.response){
+				for(const property in error.response.data){
+					this.errors.push(`${property}:${error.response.data}`)
+				}
+			}
 		})
+		.finally(
+			() => {
+				this.loading = true
+			}
+		)
 	
 		}
 	},

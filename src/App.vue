@@ -1,7 +1,7 @@
 <template>
 <div>
+  <vue3-progress />
   <router-view/>
-  
 </div>
 </template>
 
@@ -19,6 +19,21 @@ import axios from 'axios'
       }else{
         axios.defaults.headers.common['Authorization'] = ""
       }
-    }
+    },
+     mounted() {
+      this.$progress.finish();
+    },
+    created() {
+      this.$progress.start();
+
+      this.$router.beforeEach((to, from, next) => {
+        this.$progress.start();
+        next();
+      });
+
+      this.$router.afterEach((to, from) => {
+        this.$progress.finish();
+      });
+    },
   }
 </script>

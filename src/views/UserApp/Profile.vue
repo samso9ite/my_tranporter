@@ -86,13 +86,13 @@
                                                                 </div>
                                                                 <div class="col-lg-6 ">  
                                                                     <label class="form-label">Upload Profile Picture</label>
-                                                                 <div class="input-group mb-3 ">
-                                                                      
-                                                                    <span class="input-group-text">Upload</span>
-                                                                    <div class="form-file">
-                                                                        <input type="file" class="form-file-input form-control" ref="image" v-on:change="handleFileUpload()">
+                                                                    <div class="input-group mb-3 ">
+                                                                        
+                                                                        <span class="input-group-text">Upload</span>
+                                                                        <div class="form-file">
+                                                                            <input type="file" class="form-file-input form-control" ref="image" v-on:change="handleFileUpload()">
+                                                                        </div>
                                                                     </div>
-                                                                </div>
                                                                 </div>
                                                             </div>
                                                            <button class="btn btn-rounded btn-primary" type="submit">Save  </button>
@@ -154,7 +154,6 @@ import Api from "../Api.js"
                 Api.axios_instance.put(Api.baseUrl+'/auth/user/profile/update', formData)
                 .then(response => {
                     createToast('Profile Updated')
-                    console.log(response.data.data.first_name);
                     localStorage.setItem('first_name', response.data.data.first_name)
                     localStorage.setItem('last_name', response.data.data.last_name)
                 })
@@ -179,10 +178,6 @@ import Api from "../Api.js"
                     this.email = response.data.email
 					this.$store.commit('set_user_details', data)
 				})
-                // this.first_name =  this.$store.state.user.first_name
-                // this.last_name = this.$store.state.user.last_name
-                // this.email = this.$store.state.user.email
-                // console.log(this.$store.state.user)
             },
             handleFileUpload(){
                 this.image = this.$refs.image.files[0];

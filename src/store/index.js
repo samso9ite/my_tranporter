@@ -30,6 +30,17 @@ export default createStore({
       transport_fee: '', 
       reference: ''
     },
+    bulkUploadStore: {
+      country_code: '',
+      state_code: '',
+      partners: [],
+      transport_type: [],
+      description: ''
+    },
+    bulk_upload_ref: {
+      upload_reference: '',
+      partner_id: ''
+    },
     isAuthenticated: false,
     token:'',
     phone: '',
@@ -54,22 +65,12 @@ export default createStore({
       state.isAuthenticated = false
     },
     set_user_details(state, payload){
-      console.log('jdhslk;lk')
-      console.log(localStorage.getItem('email'))
       state.user.email = JSON.parse(localStorage.getItem('email'))
       state.user.first_name = JSON.parse(localStorage.getItem('first_name'))
       state.user.last_name = JSON.parse(localStorage.getItem('last_name'))
       state.user.wallet_balance = JSON.parse(localStorage.getItem('wallet_balance'))
       state.user.phone = JSON.parse(localStorage.getItem('phone'))
       state.user.image = JSON.parse(localStorage.getItem('image'))
-      // if(payload){
-      // state.user.email = payload.email
-      // state.user.first_name = payload.first_name
-      // state.user.last_name = payload.last_name
-      // state.user.wallet_balance = payload.wallet_balance
-      // state.user.phone = payload.phone
-      // state.user.image = payload.image
-      // }
     },
     set_reference(state, payload){
       state.phone = payload.phone
@@ -111,8 +112,18 @@ export default createStore({
       state.order.transport_fee = payload.transport_fee,
       state.order.reference = payload.reference,
       state.order.expected_time = payload.expected_time
+    },
+    set_bulk_upload(state, payload){
+      state.bulkUploadStore.country_code = payload.country_code,
+      state.bulkUploadStore.state_code = payload.state_code,
+      state.bulkUploadStore.partners = payload.partners,
+      state.bulkUploadStore.transport_type = payload.transport_type,
+      state.bulkUploadStore.description = payload.description
+    },
+    bulk_upload_reference(state, payload){
+      state.bulk_upload_ref.upload_reference = payload.upload_reference,
+      state.bulk_upload_ref.partner_id = payload.partner_id
     }
-   
   },
   
   actions: {

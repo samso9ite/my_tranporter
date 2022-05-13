@@ -6,22 +6,12 @@
 		<div class="container-fluid">
 			<div class="row">
 			<div class="col-lg-12">
-				<!-- <GoogleMap
-					api-key="AIzaSyAFbHM1j8bJmZ5cqqyFM48HkKMAldFq6qc"
-					style="width: 100%; height: 1080px"
-					:center="center"
-					:zoom="15"
-					:getUserLocation="true"
-					> -->
-					<!-- <Marker :options="{ position: destination_marker }" /> -->
-					<!-- <Marker v-for= :options="{ position: center }" /> -->
-				<!-- </GoogleMap> -->
-				  <GMapMap
+				<GMapMap
 					:center="center"
 					:zoom="15"
 					ref="myMapRef"
 					map-type-id="terrain"
-					style="width: 100%; height: 970px"
+					style="width: 100% !important; height: 1200px"
 					 :options="{
                       zoomControl: true,
                       mapTypeControl: true,
@@ -30,7 +20,6 @@
                       rotateControl: true,
                       fullscreenControl: true,
                 }"
-		
 				>
 			 	<!-- <DirectionsRenderer travelMode="DRIVING" :origin="{position:center}" :destination="{position:destination_marker}"/> -->
 				<GMapMarker
@@ -79,17 +68,18 @@ import Api from "../Api.js"
 export default defineComponent({
   name: 'UserDashboard',
 //   props: ['merchant_id'],
-  components: { GoogleMap, Marker, UserSideBar, SetChannel, SetLocation, ListChannel, OrderPreview, Complete },
+  components: { GoogleMap, Marker, UserSideBar, SetChannel, SetLocation, ListChannel, OrderPreview, Complete},
  
    data() {
     return {
       positon: null,
-	  center:{ lat: 41.689247, lng: -74.044502 },
+	  center:{ lat:  41.689247, lng: -74.044502 },
 	  destination_marker:{lat: 40.689247, lng: -74.044502 },
 	  travelMode:'DRIVING',
 	  state: 'location',
 	  merchant_list: [],
-	  recommended_merchant:{}
+	  recommended_merchant:{},
+	  loading: false
     }
   },
   mounted(){
@@ -104,21 +94,20 @@ export default defineComponent({
 methods: {
 	get_user_details(){
 		 Api.axios_instance.get(Api.baseUrl+'/auth/user/profile/get')
-                .then(response => {
-					const data = {
-                        email:response.data.email,
-                        first_name: response.data.first_name,
-                        last_name:response.data.last_name,
-                        wallet_balance: response.data.wallet_balance,
-                        phone: response.data.phone,
-                        image: response.data.image,
+		.then(response => {
+			const data = {
+				email:response.data.email,
+				first_name: response.data.first_name,
+				last_name:response.data.last_name,
+				wallet_balance: response.data.wallet_balance,
+				phone: response.data.phone,
+				image: response.data.image,
 
-                    }
-					this.$store.commit('set_user_details', data)
-				})
+			}
+			this.$store.commit('set_user_details', {data})
+		})
 	},
 	setDestination(place) {
-		console.log(place);
 		let ac = place.address_components;
 		let lat = place.geometry.location.lat();
 		let lon = place.geometry.location.lng();
@@ -140,20 +129,20 @@ methods: {
 
         let { positions:center, position:destination_marker, travelMode } = this;
         if (!"position:center" || !"position:destination_marker" || !travelMode) return;
-        directionsService.route(
-          {
-            origin:this.center,
-            destination:this.destination_marker,
-            travelMode:this.travelMode
-          },
-          (response, status) => {
-			  let distance_in_kilometre = response.routes[0].legs[0].distance.value / 1000
-			  console.log(distance_in_kilometre);
-				const data = {distance_in_km:distance_in_kilometre}
-			   this.$store.commit('set_distance', data)
-			if (status !== "OK") return;
-            directionsDisplay.setDirections(response);
-          }
+			directionsService.route(
+			{
+				origin:this.center,
+				destination:this.destination_marker,
+				travelMode:this.travelMode
+			},
+			(response, status) => {
+				let distance_in_kilometre = response.routes[0].legs[0].distance.value / 1000
+				console.log(distance_in_kilometre);
+					const data = {distance_in_km:distance_in_kilometre}
+				this.$store.commit('set_distance', data)
+				if (status !== "OK") return;
+				directionsDisplay.setDirections(response);
+			}
      
       );
 	},
@@ -179,7 +168,7 @@ methods: {
 	
   getCurrentPosition() {
   var that = this
-	  if ("geolocation" in navigator) {
+	if ("geolocation" in navigator) {
   /* geolocation is available */
   navigator.geolocation.getCurrentPosition(displayLocationInfo);
   function displayLocationInfo(position) {
@@ -198,8 +187,8 @@ methods: {
 },
 
 change_state(state){
-		this.state=state
-		console.log(this.state);
+	this.state=state
+	console.log(this.state);
 	}
 }
 
@@ -222,4 +211,7 @@ change_state(state){
         margin-bottom: 30px;
 		margin-right:50px !important;
       }
+	  .vue-map-container{
+		  height: 1000px
+	  }
   </style>

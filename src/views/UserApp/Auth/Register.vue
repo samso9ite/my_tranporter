@@ -13,22 +13,27 @@
                                                 <img  src="../../../statics/fav.png"  /></a>
                                         </div>
                                         <h4 class="text-center mb-4">User Signup</h4>
+                                        <div class="alert alert-danger alert-dismissible alert-alt fade show" v-if="errors.length">
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+                                            </button>
+                                            <span v-for="error in errors" :key="error"><strong>{{error}}<br></strong></span>
+                                        </div>
                                         <form @submit.prevent="submitForm">
                                              <div class="mb-3">
                                                 <label class="mb-1"><strong>First Name </strong></label>
-                                                <input type="text" class="form-control" name="first_name" max="6" v-model="first_name">
+                                                <input type="text" class="form-control" name="first_name" max="6" v-model="first_name" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="mb-1"><strong>Last Name </strong></label>
-                                                <input type="text" class="form-control" name="last_name" max="6" v-model="last_name">
+                                                <input type="text" class="form-control" name="last_name" max="6" v-model="last_name" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="mb-1"><strong>Email </strong></label>
-                                                <input type="email" class="form-control" name="email" max="6" v-model="email">
+                                                <input type="email" class="form-control" name="email" max="6" v-model="email" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="mb-1"><strong>Set Password </strong></label>
-                                                <input type="password" class="form-control" name="password" max="6" v-model="password">
+                                                <input type="password" class="form-control" name="password" max="6" v-model="password" requiredy>
                                             </div>
                                             <div class="text-center">
                                                 <button class="btn btn-primary btn-block">SUBMIT</button>
@@ -60,6 +65,7 @@ import Api from "../../Api.js"
     },
     methods:{
         submitForm(e){
+            this.errors.splice(0);
             const phone = this.$store.state.phone
             const reference = this.$store.state.reference
             const formData = {password: this.password, first_name: this.first_name, last_name:this.last_name, email:this.email, phone:phone, reference:reference}
@@ -73,13 +79,13 @@ import Api from "../../Api.js"
               
                 }
                 this.$store.commit('set_user_details', data)
-                console.log(this.$store.state.user);
                 window.localStorage.setItem('email', JSON.stringify(response.data.user_details.email))
                 window.localStorage.setItem('first_name', JSON.stringify(response.data.user_details.first_name))
                 window.localStorage.setItem('last_name', JSON.stringify(response.data.user_details.last_name))
                 window.localStorage.setItem('phone', JSON.stringify(response.data.user_details.phone))
                 window.localStorage.setItem('token', JSON.stringify(response.data.token))
                 window.localStorage.setItem('referal_code', JSON.stringify(response.data.user_details.referral_code))
+                window.localStorage.setItem('isAuthenticated', true)
 
                 this.$router.push('/')
                

@@ -43,25 +43,25 @@
 
 <script>
 import Api from "../../Api.js"
+import { createToast } from 'mosha-vue-toastify';
 export default ({
     name: 'ValideOtp',
     
     data(){
         return{
             token: '',
-            // reference: '',
-            // phone: '',
             errors: '',
         }
     },
     methods:{
         submitForm(e){
+            this.errors.splice(0);
             const phone = this.$store.state.phone
             const reference = this.$store.state.reference
             const formData = {phone: phone, token: this.token, reference: reference, }
             Api.axios_instance.post(Api.baseUrl+'/auth/user/validate/otp?=vwznw2mw.O7U8tx23y0vyC5eUClLNyYqaIAJ08P40', formData)
             .then(response =>{
-                console.log(response);
+                createToast('OTP Validated')
                 this.$router.push('/register')
             })
             .catch(error => {

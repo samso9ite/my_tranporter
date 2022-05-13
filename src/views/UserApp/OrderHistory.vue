@@ -198,8 +198,7 @@
 										<td>{{order.merchant.name}}</td>
 										<td>{{order.destination}}</td>
 										<td>{{order.transport_type.name}}</td>
-											<td><span class="badge light badge-secondary">{{order.status.name}}</span></td>
-										<td><a href="javascript:void(0);" class="btn btn-secondary light btn-sm">₦{{order.transport_fee}}</a></td>
+										<td><span class="badge light badge-secondary">{{order.status.name}}</span></td>
 									</tr>
 									
 								</tbody>
@@ -240,16 +239,14 @@ import TopNavBar from '../../components/TopNavBar.vue'
 	},
 	methods: {
 		get_orders(){
-			Api.axios_instance.get(Api.baseUrl+'/transporter/user/orders/get')
+			Api.axios_instance.get(Api.baseUrl+'/transporter/user/orders/get', )
 			.then(response => {
 				this.order_list = response.data
 				this.main_order_list = response.data
-				console.log(this.order_list);
 			})
 		},
 		change_status(status){
 			this.status = status
-			console.log(this.status);
 			this.order_list = this.order_list.filter(order => order.status.id === status)
 		}
 	},

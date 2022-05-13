@@ -31,6 +31,16 @@
     </div>
 </div>
 </template>
+<script>
+export default ({
+    name: 'ForgotPwd',
+    data(){
+        return{
+            
+        }
+    }
+})
+</script>
 <style scoped>
 .bg {
   /* The image used */

@@ -18,6 +18,5 @@
             }
 
         }
-        // console.log(params.paystack_url);
     }
 </script>

@@ -22,8 +22,23 @@ let token = await localStorage.getItem('token')
   config.headers['Access-Key'] = 'vwznw2mw.O7U8tx23y0vyC5eUClLNyYqaIAJ08P40';
   return config;
 });
-const baseUrl = 'http://18.188.70.103:8000/api'
-// const mediaBaseUrl = 'https://api.groto.ng'
+const baseUrl = 'https://api.mytransporter.io/api'
+// axios_instance.interceptors.request.use(config => {
+//   this.$progress.start() 
+//   return configDoctor
+// })
+
+// // before a response is returned stop nprogress
+// axios_instance.interceptors.response.use(response => {
+//   NProgress.done()
+//   return response
+// },
+// function (error) {  
+//   NProgress.done()
+//   // console.log(error.response)
+//   return Promise.reject(error);  
+// })
+
 export default {
   axios_instance,
   baseUrl,

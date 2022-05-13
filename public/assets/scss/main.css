@@ -4335,7 +4335,7 @@ textarea.form-control-lg {
   .modal-backdrop.fade {
     opacity: 0; }
   .modal-backdrop.show {
-    opacity: 0.5; }
+    opacity: 0; }
 
 .modal-header {
   display: flex;

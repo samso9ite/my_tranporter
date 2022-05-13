@@ -115,10 +115,10 @@
 								</button>
 							</div>
 							<div class="modal-body">
-								<div class="table-responsive">
+								<div class="table-responsive" v-if="card_id.length">
 									<table class="table   table-bordered table-striped verticle-middle table-responsive-sm">
 										<tbody>
-											<tr v-for="card in update_cards" :key="card">
+											<tr v-for="card in update_cards" :key="card" class="bank" :class="{'card_active' : card.card_id  === id}" @click="select_card(card.card_id)"  >
 												<td>
 													<div class="form-check" style="">
 														<input class="form-check-input" type="radio" v-bind:value="card.card_id" v-on:click="update_rate" name="card_id" v-model="card_id" >
@@ -134,6 +134,7 @@
 										</tbody>
 									</table>
 								</div>
+								<h4 v-else> Chief! No card is available, add a card first </h4>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-primary" @click="fund_with_card">Fund Now</button>
@@ -155,47 +156,18 @@
 										
 									</tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td><img src="../../statics/master_card.png" /></td>
-										<td>*****************567</td>
-										<td class="wspace-no">04/08/2020 12:34 AM</td>
-										<td>Bag of Semolina</td>
-										<td><span class="badge light badge-secondary">Success</span></td>
+								<tbody v-if="this.latest_transactions">
+									<tr v-for="transaction in latest_transactions" :key="transaction">
+										<td>{{transaction.reference}}</td>
+										<!-- <td>*****************567</td> -->
+										<td class="wspace-no">{{transaction.order_date}}</td>
+										<td>{{transaction.item_description}}</td>
+										<td><span class="badge light badge-secondary">{{transaction.status.name}}</span></td>
 										<td>
-											<a href="javascript:void(0);" class="btn btn-secondary light btn-sm">$125,70</a>
+											<a href="javascript:void(0);" class="btn btn-secondary light btn-sm">#{{transaction.transport_fee}}</a>
 										</td>
 									</tr>
-										<tr>
-										<td><img src="../../statics/master_card.png" /></td>
-										<td>*****************567</td>
-										<td class="wspace-no">04/08/2020 12:34 AM</td>
-										<td>Bag of Semolina</td>
-										<td><span class="badge light badge-secondary">Success</span></td>
-										<td>
-											<a href="javascript:void(0);" class="btn btn-secondary light btn-sm">$125,70</a>
-										</td>
-									</tr>
-										<tr>
-										<td><img src="../../statics/master_card.png" /></td>
-										<td>*****************567</td>
-										<td class="wspace-no">04/08/2020 12:34 AM</td>
-										<td>Bag of Semolina</td>
-										<td><span class="badge light badge-secondary">Success</span></td>
-										<td>
-											<a href="javascript:void(0);" class="btn btn-secondary light btn-sm">$125,70</a>
-										</td>
-									</tr>
-										<tr>
-										<td><img src="../../statics/master_card.png" /></td>
-										<td>*****************567</td>
-										<td class="wspace-no">04/08/2020 12:34 AM</td>
-										<td>Bag of Semolina</td>
-										<td><span class="badge light badge-secondary">Success</span></td>
-										<td>
-											<a href="javascript:void(0);" class="btn btn-secondary light btn-sm">$125,70</a>
-										</td>
-									</tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -225,7 +197,9 @@ import Api from "../Api.js"
 			amount:'',
 			card_id:'',
 			transactions: [],
+			latest_transactions: [],
 			url: '', 
+			id: ''
 			}
 		},
 		
@@ -237,6 +211,9 @@ import Api from "../Api.js"
         });
 		 },
 	methods: {
+			select_card(card){
+				this.id = card
+			},
 		loadScript(callback) {
             const script = document.createElement("script");
             script.src = "https://js.paystack.co/v1/inline.js";
@@ -263,14 +240,12 @@ import Api from "../Api.js"
             return this.split.constructor === Object && Object.keys(this.split).length > 0;
         },
 		update_rate(){
-			console.log("tfgyuhjikopl")
-			console.log(this.card_id)
 		},
         payWithPaystack() {
 			this.scriptLoaded &&
         	this.scriptLoaded.then(() => {
             const paystackOptions = {
-                key: 'pk_test_6d6e3ad64bfcdf69842ca45a75af4a1c1d13ba39',
+                key: 'pk_live_7f774de7bb00dc0e58ac0ddb8aeaba8dd3f4dab3',
 				email: JSON.parse(window.localStorage.getItem('email')),
                 firstname: JSON.parse(window.localStorage.getItem('first_name)')),
                 lastname: JSON.parse(window.localStorage.getItem('last_name')),
@@ -307,11 +282,10 @@ import Api from "../Api.js"
         });
         },
 		 AddCardWithPaystack() {
-			 console.log(this.$store.state.user.email)
-            this.scriptLoaded &&
+		    this.scriptLoaded &&
         	this.scriptLoaded.then(() => {
             const paystackOptions = {
-                key: 'pk_test_6d6e3ad64bfcdf69842ca45a75af4a1c1d13ba39',
+                key: 'pk_live_7f774de7bb00dc0e58ac0ddb8aeaba8dd3f4dab3',
                 email: this.$store.state.user.email,
                 firstname: this.$store.state.user.first_name,
                 lastname: this.$store.state.user.last_name,
@@ -358,7 +332,6 @@ import Api from "../Api.js"
 			});
     	}, 
 		fund_with_card(){
-			console.log(this.card_id)
 			const formData = {card_id:this.card_id, amount:this.amount}
 			Api.axios_instance.post(Api.baseUrl+'/payment/wallet/fund/card', formData)
 			.then(response => {
@@ -389,12 +362,41 @@ import Api from "../Api.js"
 				console.log(error.response);
 			})
 			
+		},
+		getPaymentHistory(){
+				const merchant_token = JSON.parse(localStorage.getItem('merchant_id'))
+				Api.axios_instance.post(Api.baseUrl +'/payment/user/history', {merchant_id: merchant_token})
+				.then(response => {
+					console.log(response.data)
+					this.all_payments = response.data.results
+					this.payments = response.data.results
+					this.total = response.data.count
+				}
+				)
+				.catch(err => {
+					console.log(err.response)
+				})
+				Api.axios_instance.post(Api.baseUrl+'/merchant/portal/profile/get', {merchant_id:merchant_token})
+				.then((res => {
+					const data = {
+						pending_wallet_balance: res.data.pending_wallet_balance,
+						wallet_balance: res.data.wallet_balance
+					}
+					this.$store.commit('storeProfile', data)
+				}))
+			},
+		getLatestTransactions(){
+			Api.axios_instance.get(Api.baseUrl+'/transporter/user/orders/get')
+			.then(( res => {
+				this.latest_transactions = res.data;
+				// console.log(res.data);
+			}))
 		}
 	},
 	mounted(){
 		this.get_card()	
 		this.update_user_details()	
-		console.log(this.$store.state.user.cards)
+		this.getLatestTransactions()
 	},
 	computed: {
 		wallet_balance: function (){
@@ -421,8 +423,21 @@ import Api from "../Api.js"
     background-color: #ff6600;
 	border-color: #ff6600
 	}
-
 	.add_btn {
     width: 40px;
     height: 40px;}
+.card_active{
+	background-color: #473b52;
+	color:#fff !important;
+	border-radius:15px
+}
+/* .card:hover{
+	background-color: #473b52;
+	color:#fff !important;
+	cursor:pointer;
+	border-radius:15px
+} */
+	.modal { 
+   background-color: rgba(0, 0, 0, 0.5)
+}
 </style>

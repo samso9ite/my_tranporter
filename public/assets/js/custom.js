@@ -10,9 +10,12 @@
 			jQuery('.default-select').niceSelect();
 		}
 	}
+	
+	$(function () {
+		$('#datetimepicker4').datetimepicker();
+	});
 
 	var handleTheme = function(){
-		console.log("skjhds");
 		$('#preloader').fadeOut(1500);
         setTimeout(function() {
             $('#main-wrapper').addClass('show');

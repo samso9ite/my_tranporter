@@ -38,7 +38,7 @@
                                             </div>
                                         </form>
                                           <div class="new-account mt-3">
-                                        <p>Already have an account?  <router-link :to="'/validate-otp'" class="text-primary"> Sign in</router-link></p>
+                                        <p>Already have an account?  <router-link :to="'/login'" class="text-primary"> Sign in</router-link></p>
                                     </div>
                                     </div>
                                 </div>
@@ -53,22 +53,35 @@
 
 <script>
 import Api from "../../Api.js"
+import { createToast } from 'mosha-vue-toastify';
     export default ({
     name: 'Signup',
     data(){
         return{
             phone: '',
-            country:'NG',
-            errors: []
+            country: 'NG',
+            errors: [],
+            phoneData :'',
+            loading: false,
+            countryCod : '',
+            codes: [{country: "NG", code:"+234"}, {country:"South Africa", code: "+235"}, {country:"Ghana", code: "+233"}],
         }
     },
     methods:{
         submitForm(e){
-            const formData = {phone: this.phone, country:this.country}
+            this.errors.splice(0);
+            this.loading = true
+            var output =  this.codes.filter(code => {
+            return code.country == this.country
+            })
+            if (output[0].country === this.country){
+                this.countryCod = output[0].code
+            }
+            this.phoneData = this.countryCod + this.phone
+            const formData = {phone: this.phoneData, country:this.country}
             Api.axios_instance.post(Api.baseUrl+'/auth/user/request/otp', formData)
             .then(response =>{
-                
-                console.log(response)
+                createToast('Token has been sent')
                 this.$store.commit('set_reference', response.data.data)
                 this.$router.push('/validate-otp')
             })
@@ -100,11 +113,11 @@ import Api from "../../Api.js"
 }
 .bg {
   /* The image used */
-  background-image: url("../../../statics/bg13.png");
- background-blend-mode: overlay;
--webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+    background-image: url("../../../statics/bg13.png");
+    background-blend-mode: overlay;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 </style>

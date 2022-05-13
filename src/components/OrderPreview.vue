@@ -2,7 +2,7 @@
     	<div class="row" >
 			<div class="col-xl-12">
 				<div class="row  text-center" style="background-color:#ff6600; border-top-left-radius:30px;  border-top-right-radius:30px">
-					<h3 style="padding-top:1em; color:white">Order Summary</h3>
+					<h3 style="padding-top:1em; color:white"> <a @click="preivousComponent"><i class="fa fa-long-arrow-left" aria-hidden="true" style="font-size:25px;margin-top:10px; margin-right:2em"></i> </a> Order Summary</h3>
 				</div>
 				<div class="row" style="margin-top:2.5em">
 					<div class="col-lg-12">
@@ -80,16 +80,20 @@ import Api from "../views/Api.js"
 				order_ref: '',
 				cards: [],
 				transport_fare: '',
+				previousState: 'merchant'
 			}
 		},
-		 created() {
-        this.scriptLoaded = new Promise(resolve => {
-            this.loadScript(() => {
-                resolve();
-            });
-        });
+		created() {
+			this.scriptLoaded = new Promise(resolve => {
+				this.loadScript(() => {
+					resolve();
+				});
+			});
 		 },
 		methods: {
+			preivousComponent(){
+				this.$emit('change_state', this.previousState)
+			},
 			pay_with_wallet(){
 				const formData = {order_ref:this.$store.state.order.reference, payment_method: '3' }
 				Api.axios_instance.post(Api.baseUrl+'/payment/order/pay', formData)
@@ -135,7 +139,7 @@ import Api from "../views/Api.js"
 			this.scriptLoaded &&
         	this.scriptLoaded.then(() => {
 			 const paystackOptions = {
-                key: 'pk_test_6d6e3ad64bfcdf69842ca45a75af4a1c1d13ba39',
+                key: 'pk_live_7f774de7bb00dc0e58ac0ddb8aeaba8dd3f4dab3',
 				email: JSON.parse(window.localStorage.getItem('email')),
                 firstname: JSON.parse(window.localStorage.getItem('first_name)')),
                 lastname: JSON.parse(window.localStorage.getItem('last_name')),
@@ -202,7 +206,6 @@ import Api from "../views/Api.js"
 	border:1px solid #f0f0f0; border-radius:20px; padding:17px
 }
 .hover_payment_button:hover{
-	
 		color:#ff6600 !important;
 		border-color:#ff6600 ;
 		cursor: pointer;

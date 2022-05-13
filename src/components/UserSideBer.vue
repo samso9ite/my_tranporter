@@ -28,7 +28,7 @@
             <a href="index.html" class="brand-logo">
                 <img class="logo-abbr" src="../statics/logo.png" alt="">
 			</a>
-        </div>
+        </div> 
 		<div class="chatbox">
 			<div class="chatbox-btn-close"></div>
 			<div class="custom-tab-1">
@@ -684,6 +684,13 @@
 							<span class="">Wallet</span>
 						</router-link>
                     </li>
+
+					<li class="">
+						<router-link :to="'/bulk-upload-region'"> 
+							<i class="fa fa-upload" aria-hidden="true"></i>
+							<span class="">Bulk Upload</span>
+						</router-link>
+                    </li>
 					
                     <li>
 					 <router-link :to="'/order-history'"> <i class="flaticon-043-menu"></i>
@@ -691,9 +698,7 @@
 						
 						</router-link>
                     </li>
-					
-
-							<li>
+					<li>
 						<router-link :to="'/notifications'"> 
 						<i class="fa fa-bell" aria-hidden="true"></i>
 							<span class="nav-text">Notifications</span>
@@ -707,16 +712,12 @@
 						</router-link>
                     </li>
 					<li>
-							<router-link :to="'/terms'"> 
+							<router-link :to="'https://www.mytransporter.io/privacy_policy.html'"> 
 							<i class="fa fa-user-circle-o" aria-hidden="true"></i>
 							<span class="nav-text">T & C's</span>
 							</router-link>
 						</li>
-
-				
-			
-                   
-                </ul>
+				 </ul>
 				<div class="plus-box">
 					<p class="fs-16 font-w500 mb-4" style="color: white;">Get goods delivered in minutes</p>
 					<a class="text-white" style="font-size:17px" href="javascript:void(0);">Referal Code : <strong> {{referal_code}}</strong></a>
@@ -742,22 +743,17 @@
 	},
 	methods:{
 		order_route(){
-			
 		},
 		route_link(path){
-			
 		}
 	}
  }
 </script>
 
-<style>
-
-
+<style scoped>
 a.router-link-active.router-link-exact-active{
-	background-color: #c85102ad  !important;
+	background-color: #ff6600c9  !important; 
 	color: white !important;
 	font-weight: 600 !important;
 }
-
 </style>

@@ -97,7 +97,6 @@ export default {
 
     methods: {
         register(e){
-            console.log("drfghjnkml");
             const formData ={
                 phone:this.phone,
                 email:this.email,
