@@ -44,6 +44,11 @@
                     <div class="col-xl-8 mb-4"> 
                         <div class="card">
                             <div class="card-body">
+                                <div class="alert alert-danger alert-dismissible alert-alt fade show" v-if="errors.length">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+                                    </button>
+                                    <span v-for="error in errors" :key="error"><strong>{{error}}<br></strong></span>
+                                </div>
                                 <div class="profile-tab">
                                     <div class="custom-tab-1">
                                         <ul class="nav nav-tabs">
@@ -66,24 +71,10 @@
                                                                     <input type="text" placeholder="" class="form-control"  name="last_name" v-model="last_name">
                                                                 </div>
                                                             </div>
-                                                            <div class="mb-3">
-                                                                <label class="form-label">Address</label>
-                                                                <input type="text" placeholder="1234 Main St" class="form-control"  name="address" v-model="address">
-                                                            </div>
+                                                          
                                                            
                                                             <div class="row">
-                                                                <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">City</label>
-                                                                    <input type="text" class="form-control" name="city" v-model="city">
-                                                                </div>
-                                                                <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">Gender</label>
-                                                                    <select class="form-control default-select wide" id="inputState" name="gender" v-model="gender">
-                                                                        <option selected="" value="default">Choose...</option>
-                                                                        <option value="Male">Male</option>
-                                                                        <option value="Female">Female</option>
-                                                                    </select>
-                                                                </div>
+                                                                
                                                                 <div class="col-lg-6 ">  
                                                                     <label class="form-label">Upload Profile Picture</label>
                                                                     <div class="input-group mb-3 ">
@@ -95,7 +86,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                           <button class="btn btn-rounded btn-primary" type="submit">Save  </button>
+                                                           <button class="btn btn-rounded btn-primary" type="submit" :disabled="loading"> Save  </button>
 
                                                         </form>
                                                     </div>
@@ -103,13 +94,62 @@
                                             </div>
                                         </div>
                                     </div>
-								
+
+
+                                    <div class="custom-tab-1" style="margin-top:2em">
+                                        <ul class="nav nav-tabs">
+                                            <li class="nav-item "><a href="#profile-settings" data-bs-toggle="tab" class="nav-link active show">User Locations</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content active">
+                                           
+                                            <div id="profile-settings" class="tab-pane fade  active show">
+                                                <div class="pt-3">
+                                                <table class="table" style="margin-bottom: 2em; padding-bottom:4em">
+                                                    <tbody>
+                                                        <tr v-for="location in locations" :key="location">
+                                                            <td>{{location.address}}</td>
+                                                            <td>{{location.type}}</td>
+                                                        </tr>
+                                                    
+                                                    </tbody>
+                                                </table>
+                                <div class="settings-form">
+                                    <form @submit.prevent="addLocation">
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label">Address</label>
+                                                <GMapAutocomplete
+                                                    placeholder="Enter Address"
+                                                    class="form-control"
+                                                    @place_changed="setAddress"
+                                                >
+                                                </GMapAutocomplete>
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label">Type</label>
+                                                <select class="form-control default-select wide" id="inputState" name="type" v-model="type">
+                                                    <option selected="" value="default">Select Type...</option>
+                                                    <option value="HOME">Home</option>
+                                                    <option value="WORK">Work</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <button class="btn btn-rounded btn-primary" type="submit" :disabled="loading">Add Location </button>
+
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>
 
-					<!-- -->
              
             </div>
 			
@@ -134,21 +174,28 @@ import Api from "../Api.js"
                 first_name: '',
                 last_name: '',
                 email: '',
-                address: '',
+                address_multiple_location: '',
                 gender: 'default',
+                lat_multiple_location: '',
+                lng_multiple_location: '',
                 city:'',
-                image:''
+                image:'',
+                type: 'default',
+                errors: [],
+                locations: []
 			}
 		},
         methods: {
             update_profile(){
+                this.loading = true
                 const formData = {
                 first_name : this.first_name,
                 last_name: this.last_name,
                 address: this.address,
                 gender: this.gender,
                 city: this.city, 
-                email:''
+                email:'',
+                loading: false
                 }
                 formData.append('image', this.image);
                 Api.axios_instance.put(Api.baseUrl+'/auth/user/profile/update', formData)
@@ -158,9 +205,58 @@ import Api from "../Api.js"
                     localStorage.setItem('last_name', response.data.data.last_name)
                 })
                 .catch(error =>{
-                    console.log(error.response)
+                    if(error.response){
+                        for(const property in error.response.data){
+                            this.errors.push(`${property}:${error.response.data.detail}`)
+                        }
+                    }
+                })
+                .finally(() => {
+                    this.loading = false
+                }
+                )
+            },
+            setAddress(place) {
+                this.address_multiple_location = place.formatted_address;
+                this.lng_multiple_location = place.geometry.location.lng();
+                this.lat_multiple_location = place.geometry.location.lat();
+            },
+            getAllLocations(){
+                Api.axios_instance.get(Api.baseUrl+'/auth/user/locations/get')
+                .then(response => {
+                    this.locations = response.data
+                })
+                .catch(err => {
+                    console.log(error.response);
                 })
             },
+            addLocation(){
+                this.loading = true;
+                const data = {
+                        address: this.address_multiple_location,
+                        latitude: this.lat_multiple_location,
+                        longitude: this.lng_multiple_location,
+                        type: this.type
+                }
+                Api.axios_instance.post(Api.baseUrl+'/auth/user/locations/home', data)
+                .then( response => {
+                    this.getAllLocations()
+                    this.$toast.success(`New location has been added`)
+                    
+                    }
+                )
+                .catch(error =>{
+                    if(error.response){
+                        for(const property in error.response.data){
+                            this.errors.push(`${property}:${error.response.data.detail}`)
+                        }
+                    }
+                })
+                .finally(
+                    this.loading = true
+                )
+            },
+           
             get_details(){
                 Api.axios_instance.get(Api.baseUrl+'/auth/user/profile/get')
                 .then(response => {
@@ -186,6 +282,7 @@ import Api from "../Api.js"
         
         mounted(){
             this.get_details()
+            this.getAllLocations()
         },
         computed: {
             update_storage: function(){

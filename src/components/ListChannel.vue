@@ -8,42 +8,77 @@
 				<div class="row" style="margin-top:2.5em">
 					<div class="card-body pb-0 dz-scroll loadmore-content pt-0" id="LatestSalesContent" >
 						<perfect-scrollbar>
-							<div class="media pb-3 border-bottom mb-3 align-items-center" v-for="merchant in merchant_list" :key="merchant" >
+							<div class=" pb-3 border-bottom mb-3 " v-for="merchant in merchant_list" :key="merchant" >
 								<div  @click="preview_order(merchant.merchant.merchant_id)">
 									<div class="media-image me-2 col-lg-12 transport">
 										<div class="row">
-											<div class="col-lg-2">
-												<img src="../statics/fav.png" alt=""> 
+											<div class="col-lg-2" v-if="merchant.merchant.logo">
+												<img src="../statics/fav.png" alt=""> <br>
+												<span style="" v-if="merchant.merchant.ratings === 1">
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span  v-if="merchant.merchant.ratings === 2">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span  v-if="merchant.merchant.ratings === 3">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span  v-if="merchant.merchant.ratings === 4">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span v-if="merchant.merchant.ratings === 5">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+											</div>
+											<div class="col-lg-2" v-else>
+												<img :src="merchant.merchant.logo" alt=""><br>
+												<span style="" v-if="merchant.merchant.ratings === 1">
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span  v-if="merchant.merchant.ratings === 2">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span  v-if="merchant.merchant.ratings === 3">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span v-if="merchant.merchant.ratings === 4">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
+												<span v-if="merchant.merchant.ratings === 5">
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+													<i class="fa fa-star fs-14 text-orange"></i>
+												</span>
 											</div>
 											<div class="col-lg-8" style="padding-top:0.7em; margin-left:1em; font-weight:500; font-size:18px">
-												{{merchant.merchant.name}}
-												<span style="padding-left:1em" v-if="merchant.merchant.ratings === 1">
-													<i class="fa fa-star fs-16 text-orange"></i>
-												</span>
-												<span style="padding-left:1em" v-if="merchant.merchant.ratings === 2">
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-												</span>
-												<span style="padding-left:1em" v-if="merchant.merchant.ratings === 3">
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-												</span>
-												<span style="padding-left:1em" v-if="merchant.merchant.ratings === 4">
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-												</span>
-												<span style="padding-left:1em" v-if="merchant.merchant.ratings === 5">
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-													<i class="fa fa-star fs-16 text-orange"></i>
-												</span>
+												<b>{{merchant.merchant.name}}</b><br>
+												<p v-if="merchant.merchant.description">{{merchant.merchant.description}}</p>
+												<p v-if="merchant.merchant.completedOrder">Completed orders: {{merchant.merchant.completedOrder}}</p>
+												<p v-if="merchant.merchant.lowest_capped_amount">Lowest capped amount: #{{merchant.merchant.lowest_capped_amount}}</p>
+												<p>Completed orders: {{merchant.merchant.completedOrder}}</p>
+												<p v-if="accept_cash_on_delivery"> Cash on delivery: Yes</p>
+												<p>Rate/KM: #{{merchant.merchant.rateInKm}}</p>
+												<!-- <p v-if=""></p> -->
 											</div>
-											<div class="col-lg-3"><span class="star-review d-inline-block fs-16 me-auto text-secondary "></span></div>
+											<!-- <div class="col-lg-3"><span class="star-review d-inline-block fs-16 me-auto text-secondary "></span></div> -->
 										</div>
 									</div>
 								</div>
@@ -108,8 +143,9 @@ export default {
 
 	computed: {
 		merchant_list() {
-		return	this.$store.state.order.merchant_list
-	}
+			console.log(this.$store.state.order.merchant_list)
+			return	this.$store.state.order.merchant_list
+		}
 	}
 }
 </script>
@@ -126,6 +162,6 @@ export default {
 	cursor:pointer
 }
 .ps {
-  height: 800px;
+  height: 700px;
 }
 </style>

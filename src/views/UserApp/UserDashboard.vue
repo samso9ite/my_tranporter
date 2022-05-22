@@ -25,13 +25,37 @@
 				<GMapMarker
 					:key="marker.id"
 					v-for="marker in  [
-					{ position:center},{position:destination_marker}]"
+					{position:center},{position:destination_marker}]"
 						:position="marker.position"
 					/>
 			 	</GMapMap>
             </div>
-			<div v-show="state === 'location'" class="col-xl-4 col-xxl-4 object overlay" style="background:#fff; height:40%; opacity:100%; border-radius:40px; margin-right:30px ">
-				<SetLocation @setDestination='setDestination' @setOrigin='setOrigin' @change_state="change_state" />
+
+			<div v-show="state === 'location'" class="col-xl-4 col-xxl-4 object overlay" style="background:#fff; opacity:100%; border-radius:40px; margin-right:30px ">
+				<SetLocation @setDestination='setDestination' @setOrigin='setOrigin' @change_state="change_state" :pickup_address="pickup_address" :destination_address="destination_address" >
+					<!-- Pickup Location Slot -->
+					<template v-slot:pickupSlot>
+						<div v-if="loading">
+							<center>Loading ...</center>
+						</div>
+						<div v-else v-for="location in locations" :key="location" class="bank" :class="{'bank_active' : location.id  === style_id}" @click="selected_location(location.id)" >
+							<div class="row" style="padding:6px 10px">
+								<span style="margin-left:4px !important">{{location.address}} <b> {{location.type}} </b> </span>
+							</div>
+						</div>
+					</template>
+					<!-- Destination Location Slot  -->
+					<template v-slot:destinationSlot>
+						<div v-if="loading">
+							<center>Loading ...</center>
+						</div>
+						<div v-else v-for="location in locations" :key="location" class="bank" :class="{'bank_active' : location.id  === destination_style_id}" @click="selected_destination(location.id)" >
+							<div class="row" style="padding:6px 10px">
+								<span style="margin-left:4px !important">{{location.address}} <b> {{location.type}} </b> </span>
+							</div>
+						</div>
+					</template>
+				</SetLocation>
 			</div>
 			<div v-show="state === 'description'" class="col-xl-4 col-xxl-4 object overlay" style="background:#fff; opacity:100%; border-radius:40px; margin-right:30px ">
 				<SetChannel @change_state="change_state" />
@@ -66,11 +90,9 @@ import { GoogleMap, Marker } from 'vue3-google-map'
 import Api from "../Api.js"
 
 export default defineComponent({
-  name: 'UserDashboard',
-//   props: ['merchant_id'],
-  components: { GoogleMap, Marker, UserSideBar, SetChannel, SetLocation, ListChannel, OrderPreview, Complete},
- 
-   data() {
+name: 'UserDashboard',
+components: { GoogleMap, Marker, UserSideBar, SetChannel, SetLocation, ListChannel, OrderPreview, Complete},
+data() {
     return {
       positon: null,
 	  center:{ lat:  41.689247, lng: -74.044502 },
@@ -79,7 +101,19 @@ export default defineComponent({
 	  state: 'location',
 	  merchant_list: [],
 	  recommended_merchant:{},
-	  loading: false
+	  loading: false,
+	  locations: [],
+	  style_id: '',
+	  loading: false,
+	  pickup_lat: '',
+	  pickup_lng: '',
+	  pickup_address: '',
+	  destination_lat: '',
+	  destination_lng: '',
+	  destination_address: '',
+	  pickup_location_selected: false,
+	  destination_location_selected: false,
+	  destination_style_id: ''
     }
   },
   mounted(){
@@ -87,13 +121,27 @@ export default defineComponent({
     this.geoId = navigator.geolocation.watchPosition( (position, err) => {
 	this.position = position
 	this.get_user_details()
-	console.log(this.$store.state.user)
-    })
+	this.getAllLocations()
+	})
 },
 
 methods: {
+	getAllLocations(){
+		this.loading = true
+		console.log(this.loading);
+		Api.axios_instance.get(Api.baseUrl+'/auth/user/locations/get')
+		.then(response => {
+			this.locations = response.data
+		})
+		.catch(err => {
+			console.log(error.response);
+		})
+		.finally(() => {
+			this.loading = false
+		})
+	},
 	get_user_details(){
-		 Api.axios_instance.get(Api.baseUrl+'/auth/user/profile/get')
+		Api.axios_instance.get(Api.baseUrl+'/auth/user/profile/get')
 		.then(response => {
 			const data = {
 				email:response.data.email,
@@ -102,24 +150,47 @@ methods: {
 				wallet_balance: response.data.wallet_balance,
 				phone: response.data.phone,
 				image: response.data.image,
-
 			}
 			this.$store.commit('set_user_details', {data})
 		})
 	},
+	selected_location(id){
+		this.pickup_location_selected = true
+		let selected_location = this.locations.filter(location => location.id === id)
+		this.style_id = id
+		this.pickup_lat = parseFloat(selected_location[0].latitude)
+		this.pickup_lng = parseFloat(selected_location[0].longitude)
+		this.pickup_address = selected_location[0].address
+		this.setOrigin()
+	},
+	selected_destination(id){
+		this.destination_location_selected = true
+		let selected_location = this.locations.filter(location => location.id === id)
+		this.destination_style_id = id
+		this.destination_lat = parseFloat(selected_location[0].latitude)
+		this.destination_lng = parseFloat(selected_location[0].longitude)
+		this.destination_address = selected_location[0].address
+		this.setDestination()
+	},
 	setDestination(place) {
-		let ac = place.address_components;
-		let lat = place.geometry.location.lat();
-		let lon = place.geometry.location.lng();
-		let address = place.formatted_address;
+		if (place){
+			this.destination_location_selected = false
+			this.destination_style_id = ''
+		}
+		if (this.destination_location_selected){
+		}else{
+			this.destination_lat = place.geometry.location.lat();
+			this.destination_lng = place.geometry.location.lng();
+			this.destination_address = place.formatted_address;
+		}
 		this.destination_marker = {
-			lat : lat,
-         	lng: lon
+			lat : this.destination_lat,
+         	lng: this.destination_lng
 		}
 		const data = {
-			destination_latitude:lat,
-			destination_longitude:lon,
-			destination:address,
+			destination_latitude:this.destination_lat,
+			destination_longitude:this.destination_lng,
+			destination:this.destination_address,
 			type: "destination"
 		}
 		this.$store.commit('set_location', data)
@@ -137,8 +208,7 @@ methods: {
 			},
 			(response, status) => {
 				let distance_in_kilometre = response.routes[0].legs[0].distance.value / 1000
-				console.log(distance_in_kilometre);
-					const data = {distance_in_km:distance_in_kilometre}
+				const data = {distance_in_km:distance_in_kilometre}
 				this.$store.commit('set_distance', data)
 				if (status !== "OK") return;
 				directionsDisplay.setDirections(response);
@@ -147,51 +217,60 @@ methods: {
       );
 	},
 	setOrigin(place){
-		let ac = place.address_components;
-		let address = place.formatted_address;
-		let lat = place.geometry.location.lat();
-		let lon = place.geometry.location.lng();
-		let city = ac[0]["short_name"];
-		this.center = {
-          lat : lat,
-          lng: lon,
+		if (place){
+			this.pickup_location_selected = false
+			this.style_id = ''
 		}
-
+		if (this.pickup_location_selected){
+			
+		} else {
+			this.pickup_address = place.formatted_address;
+			this.pickup_lat = place.geometry.location.lat();
+			this.pickup_lng = place.geometry.location.lng();
+		}
+		this.center = {
+			lat : this.pickup_lat,
+			lng: this.pickup_lng,
+		}
 		const data = {
-			pickup_latitude: lat,
-			pickup_longitude: lon,
-			pickup_location: address, 
+			pickup_latitude: this.pickup_lat,
+			pickup_longitude: this.pickup_lng,
+			pickup_location: this.pickup_address, 
 			type:"origin"
 		}
 		this.$store.commit('set_location', data)
+	
     },
 	
-  getCurrentPosition() {
-  var that = this
-	if ("geolocation" in navigator) {
-  /* geolocation is available */
-  navigator.geolocation.getCurrentPosition(displayLocationInfo);
-  function displayLocationInfo(position) {
-    const lng = position.coords.longitude;
-    const lat = position.coords.latitude;
-	that.position = position
-	that.center = {
-		lat: position.coords.latitude,
-		lng: position.coords.longitude
-    }
-
-}
-} else {
-  console.log('geolocation IS NOT available on your browser');
-}
-},
-
-change_state(state){
-	this.state=state
-	console.log(this.state);
+	getCurrentPosition() {
+		var that = this
+		if ("geolocation" in navigator) {
+		/* geolocation is available */
+		navigator.geolocation.getCurrentPosition(displayLocationInfo);
+		function displayLocationInfo(position) {
+			const lng = position.coords.longitude;
+			const lat = position.coords.latitude;
+			that.position = position
+			that.center = {
+				lat: position.coords.latitude,
+				lng: position.coords.longitude
+			}
+		}
+	} else {
+		console.log('geolocation IS NOT available on your browser');
 	}
-}
-
+	},
+	change_state(state){
+		this.state=state
+	},
+	check_function(){
+		console.log("Checking if this s working");
+	},
+	
+},
+// mounted(){
+	
+// }
 })
 </script>
 
@@ -212,6 +291,19 @@ change_state(state){
 		margin-right:50px !important;
       }
 	  .vue-map-container{
-		  height: 1000px
+		  height: 100vh !important
 	  }
+	  .bank_active{
+		background-color: #ff6600;
+		color:#fff !important;
+		border-radius:15px;
+		padding:10px
+	}
+	.bank:hover{
+		background-color: #ff6600;
+		color:#fff !important;
+		cursor:pointer;
+		border-radius:15px;
+		
+	}
   </style>

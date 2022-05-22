@@ -24,16 +24,16 @@
 									<div class="row">
 									<div class="mb-3 col-lg-6">
 									<label class="mb-1" style="600">Title Description</label>
-										<input type="text" class="form-control" v-model="item_description" placeholder="Title Description " name="item_description" required>
+										<input type="text" class="form-control" v-model="item_description" placeholder="Title Description" name="item_description" required>
 									</div>
 									<div class="col-lg-6">
 									<label class="mb-1 " style="600">Expected Delivery Time</label>
-										<input type="datetime-local" class="form-control" v-model="item_description" placeholder="Time " name="item_description" required>
+										<input type="datetime-local" class="form-control" v-model="delivery_time" placeholder="Time" name="delivery_time" required>
 									</div>
 									</div>
 									<div  class="mb-3">
 										<label class="mb-1" style="600" >Short Description</label>
-									 <textarea class="form-control" v-model="extra_description" rows="5" id="comment" ></textarea>
+									 <textarea class="form-control" v-model="extra_description" rows="5" id="comment"></textarea>
 									</div>
 
                                 <div>
@@ -156,7 +156,7 @@ export default {
 		})
 		.finally(
 			() => {
-				this.loading = true
+				this.loading = false
 			}
 		)
 	

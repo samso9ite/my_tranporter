@@ -12,17 +12,23 @@
 					<h4 class="d-flex justify-content-between align-items-center mb-3">
 							<span class="badge badge-primary badge-pill"></span>
 						</h4>
+						<div class="alert alert-danger alert-dismissible alert-alt fade show" v-if="errors.length">
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+							</button>
+							<span v-for="error in errors" :key="error"><strong>{{error}}<br></strong></span>
+						</div>
 						<div class="col-lg-12">
 							<div class="hover_payment_button mb-3" @click="pay_with_wallet" >
 								Pay With Wallet
 							</div>
+							<div class="hover_payment_button mb-3" @click="pay_on_delivery" >
+								Pay With Cash
+							</div>
 							<div class="hover_payment_button mb-3"  @click="payWithPaystack" >
 								Pay With Paystack
 							</div>
-						
-							
-								<div class="accordion heade_style" id="accordion-one" >
-								  <div class="accordion-item">
+							<div class="accordion heade_style" id="accordion-one" >
+								<div class="accordion-item">
 									<div class="accordion-header  rounded-lg" id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne"   aria-expanded="false" role="button">
 										<span class="accordion-header-icon"></span>
 									  <span class="accordion-header-text">Pay With Card</span>
@@ -80,7 +86,8 @@ import Api from "../views/Api.js"
 				order_ref: '',
 				cards: [],
 				transport_fare: '',
-				previousState: 'merchant'
+				previousState: 'merchant',
+				errors: []
 			}
 		},
 		created() {
@@ -98,12 +105,28 @@ import Api from "../views/Api.js"
 				const formData = {order_ref:this.$store.state.order.reference, payment_method: '3' }
 				Api.axios_instance.post(Api.baseUrl+'/payment/order/pay', formData)
 				.then(response => {
-					console.log(response.data);
-					console.log(this.state);
 					this.$emit('change_state', this.state)
 				})
 				.catch(error => {
-					console.log(error.response);
+					if(error.response){
+                        for(const property in error.response.data){
+                            this.errors.push(`${property}:${error.response.data.detail}`)
+                        }
+                    }
+				})
+			},
+			pay_on_delivery(){
+				const formData = {order_ref:this.$store.state.order.reference, payment_method: '6'}
+				Api.axios_instance.post(Api.baseUrl+'/payment/order/pay', formData)
+				.then(response => {
+					this.$emit('change_state', this.state)
+				})
+				.catch(error => {
+					if(error.response){
+                        for(const property in error.response.data){
+                            this.errors.push(`${property}:${error.response.data.detail}`)
+                        }
+                    }
 				})
 			},
 	
@@ -132,9 +155,9 @@ import Api from "../views/Api.js"
         isDynamicSplit() {
             return this.split.constructor === Object && Object.keys(this.split).length > 0;
         },
-		update_rate(){
-			console.log(this.card_id)
-		},
+		// update_rate(){
+		// 	console.log(this.card_id)
+		// },
         payWithPaystack() {
 			this.scriptLoaded &&
         	this.scriptLoaded.then(() => {
@@ -173,7 +196,11 @@ import Api from "../views/Api.js"
 					this.$emit('change_state', this.state)
 				})
 				.catch(error => {
-					console.log(error.response);
+					if(error.response){
+                        for(const property in error.response.data){
+                            this.errors.push(`${property}:${error.response.data.detail}`)
+                        }
+                    }
 				})
 			},
 			get_details(){

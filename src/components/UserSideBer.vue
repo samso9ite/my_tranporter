@@ -723,7 +723,8 @@
 					<a class="text-white" style="font-size:17px" href="javascript:void(0);">Referal Code : <strong> {{referal_code}}</strong></a>
 				</div>
 				<div class="copyright">
-					<p><strong>MyTransporter Dashboard</strong> © 2021 All Rights Reserved</p>
+					<p><strong>MyTransporter Dashboard</strong> © 2022 All Rights Reserved</p>
+					<p style="color: #ff6600; font-size:17px" @click="logout"><strong> <i class="fa fa-power-off" aria-hidden="true"></i> Log Out</strong></p>
 					<!-- <p class="fs-12">Made with <span class="heart"></span> by DexignZone</p> -->
 				</div>
 			</div>
@@ -745,6 +746,10 @@
 		order_route(){
 		},
 		route_link(path){
+		},
+		logout(){
+			localStorage.clear();
+			window.location.href="/login"
 		}
 	}
  }
