@@ -28,25 +28,26 @@
 						<div class="card m-0 ">
 							<div class="card-body px-4 py-3 py-lg-2">
 								<div class="row align-items-center">
-									<div class="col-xl-3 col-xxl-12 col-lg-12 my-2">
-										<div class="media align-items-center style-2">
-											<span class="me-3">
-												<svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+									
+									<div class="col-xl-7 col-xxl-12 col-lg-12">
+										<div class="row align-items-center">
+											<div class="col-xl-3 col-md-2 col-sm-4 my-2">
+												<div class="media align-items-center style-2">
+													<span class="me-3">
+														<svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
 													<rect width="3.54545" height="26" rx="1.77273" transform="matrix(-1 0 0 1 24.8181 0)" fill="#FB3E7A"/>
 													<rect width="3.54545" height="18.9091" rx="1.77273" transform="matrix(-1 0 0 1 17.7272 7.09088)" fill="#FB3E7A"/>
 													<rect width="3.54545" height="8.27273" rx="1.77273" transform="matrix(-1 0 0 1 10.6362 17.7273)" fill="#FB3E7A"/>
 													<rect width="4" height="16" rx="2" transform="matrix(-1 0 0 1 4 10)" fill="#FB3E7A"/>
 												</svg>
-											</span>
-											<div class="media-body ml-1">
-												<p class="mb-0 fs-12">Total Order</p>
-												<h4 class="mb-0 font-w600  fs-22">{{main_order_list.length}}</h4>
+													</span>
+													<div class="media-body ml-1">
+														<p class="mb-0 fs-12">Total Order</p>
+														<h4 class="mb-0 font-w600  fs-22">{{main_order_list.length}}</h4>
+													</div>
+												</div>
 											</div>
-										</div>
-									</div>
-									<div class="col-xl-7 col-xxl-12 col-lg-12">
-										<div class="row align-items-center">
-											<div class="col-xl-4 col-md-4 col-sm-4 my-2">
+											<div class="col-xl-2 col-md-2 col-sm-4 my-2">
 												<div class="media align-items-center style-2">
 													<span class="me-3">
 														<svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +63,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-4 col-md-4 col-sm-4 my-2">
+											<div class="col-xl-2 col-md-2 col-sm-4 my-2">
 												<div class="media align-items-center style-2">
 													<span class="me-3">
 														<svg width="30" height="19" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +76,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-4 col-md-4 col-sm-4 my-2">
+											<div class="col-xl-3 col-md-2 col-sm-4 my-2">
 												<div class="media align-items-center style-2">
 													<span class="me-3">
 														<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -94,27 +95,28 @@
 												</div>
 											</div>
 
+											<div class="col-xl-2 col-md-2 col-sm-4 my-2">
+											<div class="dropdown d-inline-block">
+												<div class="dropdown-toggle mb-0 fs-18 " data-bs-toggle="dropdown">
+													<span class="font-w400 text-primary">Filter by status</span>
+												</div>
+												<div class="dropdown-menu dropdown-menu-left">
+													<a class="dropdown-item"  @click="change_status(0)"> Order Assigned</a>
+													<a class="dropdown-item"  @click="change_status(1)">Pending Orders</a>
+													<a class="dropdown-item"  @click="change_status(9)">Cancelled Orders</a>
+													<a class="dropdown-item"  @click="change_status(10)">Refunded</a>
+													<a class="dropdown-item"  @click="change_status(6)">Awaiting Orders</a>
+													<a class="dropdown-item"  @click="change_status(8)">Completed Orders</a>
+													<a class="dropdown-item"  @click="change_status(7)">Enroute Orders</a>
+													<a class="dropdown-item"  @click="change_status(5)">Rider Assigned</a>
+													<a class="dropdown-item"  @click="change_status(3)">Merchant Approved</a>
+												</div>
+										</div>
+									</div>
 											
 										</div>
 									</div>
-									<div class="col-xl-2 col-xxl-12 my-2">
-										<div class="dropdown d-inline-block">
-											<div class="dropdown-toggle mb-0 fs-18 " data-bs-toggle="dropdown">
-												<span class="font-w400 text-primary">Filter by status</span>
-											</div>
-											<div class="dropdown-menu dropdown-menu-left">
-												<a class="dropdown-item"  @click="change_status(0)"> Order Assigned</a>
-												<a class="dropdown-item"  @click="change_status(1)">Pending Orders</a>
-												<a class="dropdown-item"  @click="change_status(9)">Cancelled Orders</a>
-												<a class="dropdown-item"  @click="change_status(10)">Refunded</a>
-												<a class="dropdown-item"  @click="change_status(6)">Awaiting Orders</a>
-												<a class="dropdown-item"  @click="change_status(8)">Completed Orders</a>
-												<a class="dropdown-item"  @click="change_status(7)">Enroute Orders</a>
-												<a class="dropdown-item"  @click="change_status(5)">Rider Assigned</a>
-												<a class="dropdown-item"  @click="change_status(3)">Merchant Approved</a>
-											</div>
-										</div>
-									</div>
+									
 								</div>							
 							</div>
 						</div>

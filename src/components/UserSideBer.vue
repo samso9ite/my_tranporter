@@ -691,6 +691,13 @@
 							<span class="">Bulk Upload</span>
 						</router-link>
                     </li>
+
+					<li class="">
+						<router-link :to="'/delivery-link'"> 
+							<i class="fa fa-link" aria-hidden="true"></i>
+							<span class=""> Delivery Link</span>
+						</router-link>
+                    </li>
 					
                     <li>
 					 <router-link :to="'/order-history'"> <i class="flaticon-043-menu"></i>

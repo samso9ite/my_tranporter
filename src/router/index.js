@@ -98,6 +98,12 @@ const routes = [
     component: () => import('../views/UserApp/UploadCSV.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/delivery-link',
+    name: 'DeliveryLink',
+    component: () => import('../views/UserApp/DeliveryLink.vue'),
+    meta: { requiresAuth: true }
+  },
 
   // Merchant Routers
 

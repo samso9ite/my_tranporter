@@ -164,9 +164,6 @@ import TopNavBar from '../../components/TopNavBar.vue'
 		setOrigin(data){
 			let pick_up_lat = data.geometry.location.lat()
 			let pick_up_lng = data.geometry.location.lng()
-			console.log(pick_up_lat);
-			console.log(pick_up_lng);
-			console.log(this.map_index);
 			let destination_latitude = this.main_order_list[this.map_index]['destination_latitude']
 			let destination_longitude = this.main_order_list[this.map_index]['destination_longitude']
 			this.main_order_list[this. map_index]['pickup_location'] = data.formatted_address
@@ -178,12 +175,12 @@ import TopNavBar from '../../components/TopNavBar.vue'
 			var lat1 = this.radLogic(pick_up_lat);
 			var lat2 = this.radLogic(pick_up_lng);
 			var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-				Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+			Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 			var d = R * c;
 			this.main_order_list[this.map_index]['distance_in_km'] = d.toString()
 			// console.log(d);	
-			console.log(this.main_order_list[this.map_index]['distance_in_km']);
+			// console.log(this.main_order_list[this.map_index]['distance_in_km']);
 			// console.log(this.main_order_list[this.map_index]);
 			
 		},
@@ -192,7 +189,6 @@ import TopNavBar from '../../components/TopNavBar.vue'
 		setDestination(data){
 			let destination_lat = data.geometry.location.lat()
 			let destination_lng = data.geometry.location.lng()
-			console.log(this.map_index);
 			let pickup_latitude = this.main_order_list[this.map_index]['pickup_latitude']
 			let pickup_longitude = this.main_order_list[this.map_index]['pickup_longitude']
 			this.main_order_list[this.map_index]['destination_location'] = data.formatted_address
@@ -203,9 +199,8 @@ import TopNavBar from '../../components/TopNavBar.vue'
 			var dLon = this.radLogic(destination_lng-pickup_longitude);
 			var lat1 = this.radLogic(pickup_latitude);
 			var lat2 = this.radLogic(pickup_longitude);
-
 			var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-				Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+			Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 			var d = R * c;
 			this.main_order_list[this.map_index]['distance_in_km'] = d

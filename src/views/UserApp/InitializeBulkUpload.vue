@@ -50,7 +50,7 @@
                                                             <div class="row">
                                                                 <div class="mb-3 col-md-12">
                                                                     <label class="form-label"  style="color:#000; font-size:20px">Description</label>
-                                                                    <textarea class="form-control"  placeholder="Pleae give more description about this delivery"/>
+                                                                    <textarea class="form-control"  placeholder="Pleae give more description about this delivery" />
                                                                 </div>
                                                                
                                                             </div>
@@ -91,12 +91,12 @@ import Api from "../Api.js"
                 description: '',
                 first_name: '',
                 last_name: '',
-                transport_type: []
+                transport_type: [],
+                total_upload: ''
 			}
 		},
         methods: {
             set_country(){
-                console.log(JSON.stringify(this.transport_type));
                 const data = {
                     country_code:  this.country,
                     state_code: this.region,
@@ -105,7 +105,7 @@ import Api from "../Api.js"
                 }
                 Api.axios_instance.post(Api.baseUrl+'/bulkupload/search', data)
                 .then( response => {
-                   console.log(this.response);
+                //    console.log(this.response);
                 })
                 .catch(error => {
                     console.log(error.response);

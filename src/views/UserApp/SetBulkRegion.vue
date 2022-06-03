@@ -21,10 +21,14 @@
 										<img src="../../statics/cloud-upload.png" class="img-fluid rounded-circle" alt="">
 									</div>
 									<div class="profile-details">
-										<div class="profile-name px-3 pt-2">
-											<h4 class="mb-0">Please input all details to proceed with bulk upload </h4>
-                                            <p>{{first_name}} {{last_name}}</p>
+										<div class="profile-name  pt-2" style="padding-right: 1rem;">
+											<h4 class="mb-0">Input all details to proceed with bulk upload </h4>
+                                            <p>{{first_name}} {{last_name}}</p> 
 										</div>
+
+                                        <div class="div" style="text-align: right !important; float:right !important">
+                                           <a href="../../statics/BulkUploadSamsple.csv" download rel="noopener noreferrer" target="_blank"> <button class="btn btn-rounded btn-primary" type="submit"> <i class="fa fa-download"></i> CSV Sample </button> </a> <a href="../../statics/BulkUploadExcelSample.xlsx" download rel="noopener noreferrer" target="_blank"> <button class="btn btn-rounded btn-primary" type="submit"><i class="fa fa-download"></i>  Excel Sample  </button> </a>
+                                        </div>
 										
 									</div>
                                 </div>
@@ -39,7 +43,7 @@
                                 <div class="profile-tab">
                                     <div class="custom-tab-1">
                                         <ul class="nav nav-tabs">
-                                            <li class="nav-item "><a href="#profile-settings" data-bs-toggle="tab" class="nav-link active show">Set Transport Channel </a>
+                                            <li class="nav-item "><a href="#profile-settings" data-bs-toggle="tab" class="nav-link active show">Delivery Link </a>
                                             </li>
                                         </ul>
                                         <div class="tab-content active">
@@ -53,13 +57,17 @@
                                                     <div class="settings-form">
                                                         <form @submit.prevent="set_country">
                                                             <div class="row">
-                                                                <div class="mb-3 col-md-6">
+                                                                <div class="mb-3 col-md-4">
                                                                     <label class="form-label"  style="color:#000; font-size:20px">Select Country</label>
                                                                     <country-select v-model="country" :country="country" class="form-control" topCountry="NG" whiteList="['NG', 'DZ', 'AO', 'CM', 'CG', 'CI', 'EG', 'GA', 'GM', 'GH', 'GN', 'KE', 'ML', 'NE', '	RW', 'SN', 'TG', 'TN', 'ZM', 'ZW']" />
                                                                 </div>
-                                                                <div class="mb-3 col-md-6">
+                                                                <div class="mb-3 col-md-4">
                                                                     <label class="form-label" style="color:#000; font-size:20px">Select State/Region</label>
                                                                     <region-select v-model="region" :country="country" class="form-control" :region="region" />
+                                                                </div>
+                                                                 <div class="mb-3 col-md-4">
+                                                                    <label class="form-label" style="color:#000; font-size:20px">Total Uploads</label>
+                                                                    <input type="number" class="form-control"   v-model="total_upload">
                                                                 </div>
                                                                  <div class="mb-3 col-md-12">
                                                                     <label class="form-label" style="color:#000; font-size:20px">Description</label>
@@ -157,6 +165,7 @@ import Api from "../Api.js"
                 transport_type: [],
                 errors: [],
                 loading: false,
+                total_upload: ''
 			}
 		},
         methods: {
@@ -167,6 +176,7 @@ import Api from "../Api.js"
                     country_code:  this.country,
                     state_code: this.region,
                     transport_type: this.transport_type,
+                    total_upload: this.total_upload
                     // public_key: localStorage.getItem('token')
                 }
                 Api.axios_instance.post(Api.baseUrl+'/bulkupload/search', data)

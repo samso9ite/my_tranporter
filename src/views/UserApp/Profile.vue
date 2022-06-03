@@ -233,27 +233,26 @@ import Api from "../Api.js"
             addLocation(){
                 this.loading = true;
                 const data = {
-                        address: this.address_multiple_location,
-                        latitude: this.lat_multiple_location,
-                        longitude: this.lng_multiple_location,
-                        type: this.type
+                    address: this.address_multiple_location,
+                    latitude: this.lat_multiple_location,
+                    longitude: this.lng_multiple_location,
+                    type: this.type
                 }
                 Api.axios_instance.post(Api.baseUrl+'/auth/user/locations/home', data)
                 .then( response => {
                     this.getAllLocations()
                     this.$toast.success(`New location has been added`)
-                    
                     }
                 )
                 .catch(error =>{
                     if(error.response){
                         for(const property in error.response.data){
-                            this.errors.push(`${property}:${error.response.data.detail}`)
+                            this.errors.push(`${property}:${error.response.data}`)
                         }
                     }
                 })
                 .finally(
-                    this.loading = true
+                    this.loading = false
                 )
             },
            
@@ -267,7 +266,6 @@ import Api from "../Api.js"
                         wallet_balance: response.data.wallet_balance,
                         phone: response.data.phone,
                         image: response.data.image,
-
                     }
                     this.first_name = response.data.first_name
                     this.last_name = response.data.last_name
