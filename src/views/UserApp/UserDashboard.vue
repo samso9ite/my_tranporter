@@ -291,7 +291,7 @@ methods: {
 		margin-right:50px !important;
       }
 	  .vue-map-container{
-		  height: 69rem !important
+		  height: 60rem !important
 	  }
 	  .bank_active{
 		background-color: #ff6600;

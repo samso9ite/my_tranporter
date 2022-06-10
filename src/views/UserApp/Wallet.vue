@@ -31,14 +31,14 @@
 											<div class="modal-content">
 												<div class="modal-header">
 													<h5 class="modal-title"><b>Input Amount</b></h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal">
+													<button type="button" class="btn-close" data-bs-dismiss="modal" >
 													</button>
 												</div>
 												<div class="modal-body">
 												<div class="basic-form">
 												<div class="mb-2 col-lg-12" style="margin-right:10px">
 													<label class="sr-only">Amount</label>
-													<input type="number" class="form-control" placeholder="Amount" name="amount" v-model="amount">
+													<input type="number" class="form-control" placeholder="Amount" name="amount" v-model="amount" pattern="[0-9]*">
 												</div><br>
 												<button type="submit" class="btn btn-primary mb-2" style="margin-right:1em"  data-bs-toggle="modal" data-bs-target="#cardsModal" >Fund with Card</button>
 												<button  class="btn btn-primary mb-2 btn-bg" @click="payWithPaystack">Fund with Paystack</button>
@@ -61,238 +61,238 @@
 
 												<div class="modal-body">
 													<div class="alert alert-danger alert-dismissible alert-alt fade show" v-if="errors.length">
-														<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
-														</button>
+														<!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close">
+														</button> -->
 														<span v-for="error in errors" :key="error"><strong>{{error}}<br></strong></span>
 													</div>
 												<div class="basic-form">
 												<div class="mb-2 col-lg-12" style="margin-right:10px">
 													<label class="sr-only">Amount</label>
 													<input type="number" class="form-control" placeholder="Amount" name="amount" v-model="withdrawal_amount"> <br>
-													<input type="number" class="form-control" placeholder="Account Number" name="account_no" v-model="account_no"> <br>
+													<input type="text" class="form-control" placeholder="Account Number" name="account_no" v-model="account_no"> <br>
 									 				 <select
-    id="bankCode"
-   v-model="bank_code"
-    class="form-control form-control-alternative"
-  >
-    <option value="">--Select Bank--</option>
+														id="bankCode"
+													v-model="bank_code"
+														class="form-control form-control-alternative"
+													>
+														<option value="">--Select Bank--</option>
 
-    <option value="801">
-      Abbey Mortgage Bank
-    </option>
+														<option value="801">
+														Abbey Mortgage Bank
+														</option>
 
-    <option value="044">
-      Access Bank
-    </option>
+														<option value="044">
+														Access Bank
+														</option>
 
-    <option value="063">
-      Access Bank (Diamond)
-    </option>
+														<option value="063">
+														Access Bank (Diamond)
+														</option>
 
-    <option value="035A">
-      ALAT by WEMA
-    </option>
+														<option value="035A">
+														ALAT by WEMA
+														</option>
 
-    <option value="401">
-      ASO Savings and Loans
-    </option>
+														<option value="401">
+														ASO Savings and Loans
+														</option>
 
-    <option value="50931">
-      Bowen Microfinance Bank
-    </option>
+														<option value="50931">
+														Bowen Microfinance Bank
+														</option>
 
-    <option value="50823">
-      CEMCS Microfinance Bank
-    </option>
+														<option value="50823">
+														CEMCS Microfinance Bank
+														</option>
 
-    <option value="023">
-      Citibank Nigeria
-    </option>
+														<option value="023">
+														Citibank Nigeria
+														</option>
 
-    <option value="559">
-      Coronation Merchant Bank
-    </option>
+														<option value="559">
+														Coronation Merchant Bank
+														</option>
 
-    <option value="050">
-      Ecobank Nigeria
-    </option>
+														<option value="050">
+														Ecobank Nigeria
+														</option>
 
-    <option value="562">
-      Ekondo Microfinance Bank
-    </option>
+														<option value="562">
+														Ekondo Microfinance Bank
+														</option>
 
-    <option value="50126">
-      Eyowo
-    </option>
+														<option value="50126">
+														Eyowo
+														</option>
 
-    <option value="070">
-      Fidelity Bank
-    </option>
+														<option value="070">
+														Fidelity Bank
+														</option>
 
-    <option value="51314">
-      Firmus MFB
-    </option>
+														<option value="51314">
+														Firmus MFB
+														</option>
 
-    <option value="011">
-      First Bank of Nigeria
-    </option>
+														<option value="011">
+														First Bank of Nigeria
+														</option>
 
-    <option value="214">
-      First City Monument Bank
-    </option>
+														<option value="214">
+														First City Monument Bank
+														</option>
 
-    <option value="501">
-      FSDH Merchant Bank Limited
-    </option>
+														<option value="501">
+														FSDH Merchant Bank Limited
+														</option>
 
-    <option value="00103">
-      Globus Bank
-    </option>
+														<option value="00103">
+														Globus Bank
+														</option>
 
-    <option value="058">
-      Guaranty Trust Bank
-    </option>
+														<option value="058">
+														Guaranty Trust Bank
+														</option>
 
-    <option value="51251">
-      Hackman Microfinance Bank
-    </option>
+														<option value="51251">
+														Hackman Microfinance Bank
+														</option>
 
-    <option value="50383">
-      Hasal Microfinance Bank
-    </option>
+														<option value="50383">
+														Hasal Microfinance Bank
+														</option>
 
-    <option value="030">
-      Heritage Bank
-    </option>
+														<option value="030">
+														Heritage Bank
+														</option>
 
-    <option value="51244">
-      Ibile Microfinance Bank
-    </option>
+														<option value="51244">
+														Ibile Microfinance Bank
+														</option>
 
-    <option value="50457">
-      Infinity MFB
-    </option>
+														<option value="50457">
+														Infinity MFB
+														</option>
 
-    <option value="301">
-      Jaiz Bank
-    </option>
+														<option value="301">
+														Jaiz Bank
+														</option>
 
-    <option value="082">
-      Keystone Bank
-    </option>
+														<option value="082">
+														Keystone Bank
+														</option>
 
-    <option value="50211">
-      Kuda Bank
-    </option>
+														<option value="50211">
+														Kuda Bank
+														</option>
 
-    <option value="90052">
-      Lagos Building Investment Company Plc.
-    </option>
+														<option value="90052">
+														Lagos Building Investment Company Plc.
+														</option>
 
-    <option value="50563">
-      Mayfair MFB
-    </option>
+														<option value="50563">
+														Mayfair MFB
+														</option>
 
-    <option value="50304">
-      Mint MFB
-    </option>
+														<option value="50304">
+														Mint MFB
+														</option>
 
-    <option value="565">
-      One Finance
-    </option>
+														<option value="565">
+														One Finance
+														</option>
 
-    <option value="999991">
-      PalmPay
-    </option>
+														<option value="999991">
+														PalmPay
+														</option>
 
-    <option value="526">
-      Parallex Bank
-    </option>
+														<option value="526">
+														Parallex Bank
+														</option>
 
-    <option value="311">
-      Parkway - ReadyCash
-    </option>
+														<option value="311">
+														Parkway - ReadyCash
+														</option>
 
-    <option value="999992">
-      Paycom
-    </option>
+														<option value="999992">
+														Paycom
+														</option>
 
-    <option value="50746">
-      Petra Mircofinance Bank Plc
-    </option>
+														<option value="50746">
+														Petra Mircofinance Bank Plc
+														</option>
 
-    <option value="076">
-      Polaris Bank
-    </option>
+														<option value="076">
+														Polaris Bank
+														</option>
 
-    <option value="101">
-      Providus Bank
-    </option>
+														<option value="101">
+														Providus Bank
+														</option>
 
-    <option value="502">
-      Rand Merchant Bank
-    </option>
+														<option value="502">
+														Rand Merchant Bank
+														</option>
 
-    <option value="125">
-      Rubies MFB
-    </option>
+														<option value="125">
+														Rubies MFB
+														</option>
 
-    <option value="51310">
-      Sparkle Microfinance Bank
-    </option>
+														<option value="51310">
+														Sparkle Microfinance Bank
+														</option>
 
-    <option value="221">
-      Stanbic IBTC Bank
-    </option>
+														<option value="221">
+														Stanbic IBTC Bank
+														</option>
 
-    <option value="068">
-      Standard Chartered Bank
-    </option>
+														<option value="068">
+														Standard Chartered Bank
+														</option>
 
-    <option value="232">
-      Sterling Bank
-    </option>
+														<option value="232">
+														Sterling Bank
+														</option>
 
-    <option value="100">
-      Suntrust Bank
-    </option>
+														<option value="100">
+														Suntrust Bank
+														</option>
 
-    <option value="302">
-      TAJ Bank
-    </option>
+														<option value="302">
+														TAJ Bank
+														</option>
 
-    <option value="51211">
-      TCF MFB
-    </option>
+														<option value="51211">
+														TCF MFB
+														</option>
 
-    <option value="102">
-      Titan Bank
-    </option>
+														<option value="102">
+														Titan Bank
+														</option>
 
-    <option value="032">
-      Union Bank of Nigeria
-    </option>
+														<option value="032">
+														Union Bank of Nigeria
+														</option>
 
-    <option value="033">
-      United Bank For Africa
-    </option>
+														<option value="033">
+														United Bank For Africa
+														</option>
 
-    <option value="215">
-      Unity Bank
-    </option>
+														<option value="215">
+														Unity Bank
+														</option>
 
-    <option value="566">
-      VFD Microfinance Bank Limited
-    </option>
+														<option value="566">
+														VFD Microfinance Bank Limited
+														</option>
 
-    <option value="035">
-      Wema Bank
-    </option>
+														<option value="035">
+														Wema Bank
+														</option>
 
-    <option value="057">
-      Zenith Bank
-    </option>
-  </select>
+														<option value="057">
+														Zenith Bank
+														</option>
+													</select>
 												</div><br>
 												<!-- <button type="submit" class="btn btn-primary mb-2" style="margin-right:1em"  data-bs-toggle="modal" data-bs-target="#cardsModal" >Fund with Card</button> -->
 												<button  class="btn btn-primary mb-2 btn-bg" @click="makeWithdrawal" :disabled="loading">Make Withdrawal</button>
@@ -401,10 +401,10 @@
 					<div class="col-xl-12 card">	
 							<div class="table-responsive table-hover fs-14">
 							<table class="table mb-4 " id="orderTable">
-								<thead>
+								<thead> 
 									<tr>
 										<th>
-											<h4> Latest Transactions</h4>
+											<h4> Latest Transactions</h4> 
 										</th>
 										
 									</tr>
@@ -463,13 +463,13 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
 		},
 		
 		 created() {
-        this.scriptLoaded = new Promise(resolve => {
+         this.scriptLoaded = new Promise(resolve => {
             this.loadScript(() => {
                 resolve();
             });
         });
 		 },
-	methods: {
+		methods: {
 			select_card(card){
 				this.id = card
 			},
@@ -525,7 +525,7 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
 							})
 							
 						.catch(error =>{
-						console.log(error.response);	
+							console.log(error.response);	
 						})
 					})
                   
@@ -552,7 +552,7 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
                 firstname: this.$store.state.user.first_name,
                 lastname: this.$store.state.user.last_name,
                 // channels: this.channels,
-                amount: 50000,
+                amount: 5000,
                 // access_code: this.accessCode,
                 ref: Math.random().toString(36),
 				callback: response => {
@@ -584,7 +584,6 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
 		get_card(){
 			Api.axios_instance.get(Api.baseUrl+'/payment/user/card/get')
 			.then(response =>{
-				console.log(response)
 				this.$store.commit('add_card', {cards:response.data})
 				this.cards = this.$store.state.user.cards
 			})
@@ -608,7 +607,6 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
 		update_user_details(){
 			Api.axios_instance.get(Api.baseUrl+'/auth/user/profile/get')
 			.then(response =>{
-				console.log(response)
 				const response_data = {
 					email:response.data.email,
 					first_name: response.data.first_name,
@@ -627,15 +625,18 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
 
 		// Funtion to make withdrawal for user
 		makeWithdrawal(){
-			this.errors.splice(0);
+			this.clearErrors()
 			this.loading = true
+			console.log(this.loading);
+			console.log(this.account_no);
 			const data = {
 				account_no: this.account_no,
 				bank_code: this.bank_code,
 				amount: this.withdrawal_amount
 			}
+			console.log(data)
 			Api.axios_instance.post(Api.baseUrl +'/auth/user/funds/withdraw', data)
-				.then(response => {
+				.then(response => { 
 					this.$toast.success(`Withdrawal Request Made`)
 					$('#makeWithdrawal').collapse('hide');
 					this.account_no = ''
@@ -643,23 +644,26 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
 					this.withdrawal_amount = ''
 				})
 				.catch(error =>{
-					this.clearErrors()
+					console.log("Checking if this wrong")
 					if(error.response){
-                        for(const property in error.response.data){
+						for(const property in error.response.data){
                             this.errors.push(`${property}:${error.response.data[property]}`)
                         }
                     }
                 })
                 .finally(() => {
+					// this.clearErrors()
+					// this.account_no = ''
+					// this.bank_code = ''
+					// this.withdrawal_amount = ''
                     this.loading = false
-                })
+            	})
 		},
 		
 		getPaymentHistory(){
 				const merchant_token = JSON.parse(localStorage.getItem('merchant_id'))
 				Api.axios_instance.post(Api.baseUrl +'/payment/user/history', {merchant_id: merchant_token})
 				.then(response => {
-					console.log(response.data)
 					this.all_payments = response.data.results
 					this.payments = response.data.results
 					this.total = response.data.count
@@ -709,7 +713,7 @@ import { dataURItoBlob } from '../../../public/assets/vendor/dropzone/dist/dropz
     color: #fff;
     background-color: #473b52;
 	border-color: #473b52
-	}
+}
 .btn-bg:hover {
     color: #fff;
     background-color: #ff6600;
