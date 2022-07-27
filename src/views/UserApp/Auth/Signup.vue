@@ -21,9 +21,11 @@
                                         <form @submit.prevent="submitForm">
                                             <label ><strong>Mobile Number</strong></label>
                                             <br>
-                                             <div class="input-group mb-4">
-                                                 
-                                                 <span class="col-lg-3">                                   
+                                            <div class="input-group mb-3">
+                                                <vue-tel-input v-model="phoneInput" ref="phoneRef" mode="international" class="form-control"></vue-tel-input>
+                                            </div>
+                                             <!-- <div class="input-group mb-4">
+                                                <span class="col-lg-3">                                   
                                                     <select class="default-select btn-color sel_style wide"  v-model="country">
                                                     <option value="NG" selected>+234</option>
                                                     <option value="Ethopia">+235</option>
@@ -32,7 +34,7 @@
                                                 </select>
                                             </span>
 										    <input type="text" class="form-control" placeholder="" name="phone" v-model="phone">
-                                        </div>
+                                        </div> -->
                                             <div class="text-center">
                                                 <button class="btn btn-primary btn-block">SUBMIT</button>
                                             </div>
@@ -58,10 +60,8 @@ import { createToast } from 'mosha-vue-toastify';
     name: 'Signup',
     data(){
         return{
-            phone: '',
             country: 'NG',
             errors: [],
-            phoneData :'',
             loading: false,
             countryCod : '',
             codes: [{country: "NG", code:"+234"}, {country:"South Africa", code: "+235"}, {country:"Ghana", code: "+233"}],
@@ -71,14 +71,8 @@ import { createToast } from 'mosha-vue-toastify';
         submitForm(e){
             this.errors.splice(0);
             this.loading = true
-            var output =  this.codes.filter(code => {
-            return code.country == this.country
-            })
-            if (output[0].country === this.country){
-                this.countryCod = output[0].code
-            }
-            this.phoneData = this.countryCod + this.phone
-            const formData = {phone: this.phoneData, country:this.country}
+            let phoneData = this.$refs.phoneRef.phone.replace(/\s/g, "")
+            const formData = {phone: phoneData, country:this.country}
             Api.axios_instance.post(Api.baseUrl+'/auth/user/request/otp', formData)
             .then(response =>{
                 createToast('Token has been sent')
